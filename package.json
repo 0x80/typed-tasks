@@ -1,0 +1,71 @@
+{
+  "name": "typed-tasks",
+  "version": "0.0.0",
+  "description": "A type-safe abstraction for Google Cloud Tasks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0x80/typed-tasks"
+  },
+  "keywords": [
+    "task queue",
+    "typescript",
+    "firebase",
+    "google-cloud-tasks",
+    "google-cloud",
+    "typed",
+    "typed-pubsub",
+    "typed-firestore",
+    "typed-tasks"
+  ],
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsup-node && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "lint": "eslint src",
+    "prepare": "pnpm clean && pnpm type-check && pnpm build",
+    "prettier:check": "prettier --check .",
+    "prettier:format": "prettier --write .",
+    "test": "echo \"No test specified\"",
+    "type-check": "tsc --noEmit"
+  },
+  "author": "Thijs Koerselman",
+  "license": "MIT",
+  "devDependencies": {
+    "@codecompose/typescript-config": "^1.2.0",
+    "@eslint/js": "^9.18.0",
+    "@google-cloud/tasks": "^6.0.1",
+    "@types/node": "^22.10.7",
+    "del-cli": "^6.0.0",
+    "eslint": "^9.18.0",
+    "prettier": "^3.4.2",
+    "prettier-plugin-jsdoc": "^1.3.2",
+    "tsc-alias": "^1.8.10",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0",
+    "zod": "^3.24.2"
+  },
+  "peerDependencies": {
+    "@google-cloud/tasks": "^6.0.1",
+    "zod": "^3.24.2"
+  }
+}
