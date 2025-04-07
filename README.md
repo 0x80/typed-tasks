@@ -44,7 +44,7 @@ import { createTypedTasks } from "typed-tasks";
 import { z } from "zod";
 
 // 1. Define your task schemas
-const taskDefinitions = {
+const definitions = {
   sendNotification: z.object({
     userId: z.string(),
     message: z.string(),
@@ -52,12 +52,12 @@ const taskDefinitions = {
 };
 
 // 2. Create Cloud Tasks client
-const tasksClient = new CloudTasksClient();
+const client = new CloudTasksClient();
 
 // 3. Initialize typed Tasks
 const tasks = createTypedTasks({
-  tasksClient,
-  taskDefinitions,
+  client,
+  definitions,
   projectId: "your-gcp-project-id",
   region: "us-central1",
 });
@@ -103,7 +103,7 @@ import { z } from "zod";
  * 1. A direct Zod schema
  * 2. An object with schema and optional scheduler options
  */
-export const taskDefinitions = {
+export const definitions = {
   // Option 1: Just provide the schema directly
   sendNotification: z.object({
     userId: z.string(),
@@ -147,12 +147,12 @@ import { CloudTasksClient } from "@google-cloud/tasks";
 import { createTypedTasks } from "typed-tasks";
 
 // Create the Google Cloud Tasks client
-const tasksClient = new CloudTasksClient();
+const client = new CloudTasksClient();
 
 // Create the typed tasks client
 export const tasks = createTypedTasks({
-  tasksClient,
-  taskDefinitions,
+  client,
+  definitions,
   projectId: "your-gcp-project-id",
   region: "us-central1", // Region for all tasks
   options: {
