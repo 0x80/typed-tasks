@@ -17,6 +17,20 @@ including automatic queue configuration and smart deduplication.
 - **Automatic queue creation**: Queues are created automatically as needed
 - **Simplified error handling**: Built-in validation and graceful error handling
 
+## Installation
+
+```bash
+npm install @repo/typed-tasks
+```
+
+## Peer Dependencies
+
+This package has the following peer dependencies:
+
+- `@google-cloud/tasks`
+- `firebase-functions`
+- `zod`
+
 ## Quick Start
 
 1. Define your task schemas with Zod
@@ -63,20 +77,6 @@ export const handleSendNotification = tasks.createHandler({
   },
 });
 ```
-
-## Installation
-
-```bash
-npm install @repo/typed-tasks
-```
-
-## Peer Dependencies
-
-This package has the following peer dependencies:
-
-- `@google-cloud/tasks`
-- `firebase-functions`
-- `zod`
 
 ## Usage
 
