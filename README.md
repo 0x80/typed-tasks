@@ -20,7 +20,7 @@ including automatic queue configuration and smart deduplication.
 ## Installation
 
 ```bash
-npm install @repo/typed-tasks
+npm install typed-tasks
 ```
 
 ## Peer Dependencies
@@ -40,7 +40,7 @@ This package has the following peer dependencies:
 
 ```typescript
 import { CloudTasksClient } from "@google-cloud/tasks";
-import { createTypedTasks } from "@repo/typed-tasks";
+import { createTypedTasks } from "typed-tasks";
 import { z } from "zod";
 
 // 1. Define your task schemas
@@ -144,7 +144,7 @@ Next, create the typed tasks client:
 
 ```typescript
 import { CloudTasksClient } from "@google-cloud/tasks";
-import { createTypedTasks } from "@repo/typed-tasks";
+import { createTypedTasks } from "typed-tasks";
 
 // Create the Google Cloud Tasks client
 const tasksClient = new CloudTasksClient();
