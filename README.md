@@ -309,10 +309,8 @@ automatic options.
       their execution.
 
 4.  **No deduplication:** If you don't provide a `taskName`, `useDeduplication`
-    is `false`, and `deduplicationWindowSeconds` is not configured (or is 0),
-    Cloud Tasks will automatically generate a unique name for each task. This
-    effectively disables deduplication, allowing multiple instances of the same
-    logical task to be queued simultaneously.
+    is `false`, and `deduplicationWindowSeconds` is not configured (or is 0), no taskName is set and
+    Cloud Tasks will treat ever task as unique.
 
 Using a deduplication window is somewhat comparable to a debounce, with the main
 difference being that a task will be executed every x seconds and does not wait
