@@ -1,14 +1,14 @@
 # typed-tasks
 
 A type-safe task scheduling abstraction for Google Cloud Tasks with Firebase,
-including automatic queue configuration and smart deduplication.
+including automatic queue configuration and strategies for task deduplication.
 
 ## Features
 
 - **Type-safe task scheduling**: Full TypeScript support for schedulers and
   handlers
 - **Runtime validation**: Schema validation using Zod prevents invalid payloads
-- **Smart deduplication**: Multiple strategies for preventing duplicate task
+- **Task deduplication**: Multiple strategies for preventing duplicate task
   execution
 - **Delayed execution**: Schedule tasks to run in the future with time windows
 - **Individual queue configuration**: Each task gets its own dedicated queue
