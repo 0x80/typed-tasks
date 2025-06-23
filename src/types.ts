@@ -115,8 +115,13 @@ export type TaskPayload<
   T extends keyof Defs & string,
 > = z.infer<ExtractSchema<Defs[T]>>;
 
-/** Options for scheduling a task - currently has no configurable options */
-export type TaskScheduleOptions = Record<string, never>;
+/** Options for scheduling a task */
+export type TaskScheduleOptions = {
+  /** Optional name for the task, enabling deduplication */
+  taskName?: string;
+  /** Optional delay in seconds before the task should be executed */
+  delaySeconds?: number;
+};
 
 /** Type for the object-based handler parameters */
 export type TaskHandlerConfig<Schema extends z.ZodType> = {
@@ -137,8 +142,9 @@ export type TypedTasksClient<Defs extends TaskDefinitionRecord<string>> = {
    * @returns A function that schedules tasks with the following parameters:
    *
    *   - Data: The payload data that conforms to the task's schema
-   *   - TaskName: Optional name for the task, enabling deduplication. When not
-   *       provided and deduplication is enabled (either via useDeduplication or
+   *   - Options: Optional configuration including taskName for deduplication
+   *       and delaySeconds for custom delays. When taskName is not provided
+   *       and deduplication is enabled (either via useDeduplication or
    *       deduplicationWindowSeconds), a taskName will be automatically
    *       generated from the payload data using MD5 hash.
    */
@@ -146,7 +152,7 @@ export type TypedTasksClient<Defs extends TaskDefinitionRecord<string>> = {
     queueName: T
   ) => (
     data: z.infer<ExtractSchema<Defs[T]>>,
-    taskName?: string
+    options?: TaskScheduleOptions
   ) => Promise<void>;
 
   /** Creates a type-safe handler function for processing tasks */

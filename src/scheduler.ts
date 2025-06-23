@@ -60,14 +60,13 @@ export function createSchedulerFactory<
      *
      * @param data - The data to schedule as a task, must conform to the task's
      *   schema
-     * @param options - Optional configuration options for the task
-     * @param taskName - Optional name for the task, enabling deduplication.
-     *   Required if `deduplicationWindowSeconds` is configured for the task.
+     * @param options - Optional configuration options including taskName for
+     *   deduplication and delaySeconds for custom delays
      * @returns Promise that resolves when the task is scheduled
      */
     return async (
       data: z.infer<ExtractSchema<Defs[T]>>,
-      taskName?: string
+      options?: { taskName?: string; delaySeconds?: number }
     ): Promise<void> => {
       const taskConfig = taskRegistry.get(queueName);
       const deduplicationWindowSeconds = taskConfig?.deduplicationWindowSeconds;
@@ -86,7 +85,7 @@ export function createSchedulerFactory<
         (!!deduplicationWindowSeconds && deduplicationWindowSeconds > 0);
 
       /** Generate a task name if needed or add time window suffix */
-      let finalTaskName = taskName;
+      let finalTaskName = options?.taskName;
       if (useDeduplication && !finalTaskName) {
         // No taskName provided, generate one with window suffix if needed
         finalTaskName = generateTaskNameFromPayload(
@@ -108,12 +107,16 @@ export function createSchedulerFactory<
 
       try {
         /**
-         * If a deduplication window is configured, configure the task to be
-         * scheduled in the future
+         * Priority: deduplicationWindowSeconds > delaySeconds
+         * If a deduplication window is configured, use that delay
+         * Otherwise, use delaySeconds if provided
          */
         if (deduplicationWindowSeconds && deduplicationWindowSeconds > 0) {
           scheduleTimeSeconds =
             Math.floor(Date.now() / 1000) + deduplicationWindowSeconds;
+        } else if (options?.delaySeconds && options.delaySeconds > 0) {
+          scheduleTimeSeconds =
+            Math.floor(Date.now() / 1000) + options.delaySeconds;
         }
 
         /**
@@ -160,7 +163,7 @@ export function createSchedulerFactory<
           );
         }
 
-        /** Set schedule time only if a deduplication window is configured */
+        /** Set schedule time if delay is configured */
         if (scheduleTimeSeconds) {
           task.scheduleTime = {
             seconds: scheduleTimeSeconds,
