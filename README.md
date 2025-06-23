@@ -10,7 +10,7 @@ including automatic queue configuration and strategies for task deduplication.
 - **Runtime validation**: Schema validation using Zod prevents invalid payloads
 - **Task deduplication**: Multiple strategies for preventing duplicate task
   execution
-- **Delayed execution**: Schedule tasks to run in the future with time windows
+- **Delayed execution**: Schedule tasks to run in the future with time windows or individual delays
 - **Individual queue configuration**: Each task gets its own dedicated queue
 - **Global defaults**: Configure your own library-wide defaults with per-queue
   overrides
@@ -216,14 +216,16 @@ names.
 ### Scheduling Tasks
 
 Use the `createScheduler` function to enqueue tasks in a type-safe way. The
-scheduler function accepts an optional second argument, `taskName`, which
-enables task deduplication.
+scheduler function accepts an optional second argument with options for task
+configuration including `taskName` for deduplication and `delaySeconds` for
+custom delays.
 
-Here the function is called inline without a specific task name (no
-deduplication unless `deduplicationWindowSeconds` is set):
+#### Basic Scheduling
+
+Schedule a task immediately without any special options:
 
 ```typescript
-// Schedule without a specific task name
+// Schedule without any options
 await tasks.createScheduler("processOrder")({
   orderId: "order456",
   userId: "user789",
@@ -231,8 +233,34 @@ await tasks.createScheduler("processOrder")({
 });
 ```
 
-Schedule with a specific task name (e.g., the userId) for deduplication. Assumes
-'userId' variable is available in scope.
+#### Scheduling with Delays
+
+Schedule tasks to run in the future using `delaySeconds`:
+
+```typescript
+// Schedule a task to run in 30 seconds
+await tasks.createScheduler("sendNotification")(
+  {
+    userId: "123",
+    message: "Your order is ready!",
+  },
+  { delaySeconds: 30 }
+);
+
+// Schedule a task to run in 5 minutes
+await tasks.createScheduler("processOrder")(
+  {
+    orderId: "order456",
+    userId: "user789",
+    amount: 99.99,
+  },
+  { delaySeconds: 300 }
+);
+```
+
+#### Scheduling with Deduplication
+
+Schedule with a specific task name for deduplication:
 
 ```typescript
 await tasks.createScheduler("syncDeviceTokens")(
@@ -240,23 +268,44 @@ await tasks.createScheduler("syncDeviceTokens")(
     userId,
     force: true,
   },
-  userId // Use the userId also as the taskName for deduplication
+  { taskName: userId } // Use the userId as the taskName for deduplication
 );
 ```
 
-If you call the scheduler in multiple places in the same file, assigning it to a
-variable might be preferable:
+#### Combining Delays and Deduplication
+
+You can combine both options:
+
+```typescript
+await tasks.createScheduler("syncDeviceTokens")(
+  {
+    userId,
+    force: true,
+  },
+  {
+    taskName: `user-${userId}-sync`,
+    delaySeconds: 60, // Run in 1 minute
+  }
+);
+```
+
+#### Reusing Schedulers
+
+If you call the scheduler in multiple places, assigning it to a variable might be preferable:
 
 ```typescript
 const scheduleDeviceTokenSync = tasks.createScheduler("syncDeviceTokens");
 
 await scheduleDeviceTokenSync(
   { userId, force: true },
-  userId // Provide the userId as the task name
+  { taskName: userId }
 );
 
-/** Somewhere in a different branch you can then reuse the scheduler */
-await scheduleDeviceTokenSync({ userId }, userId);
+// Somewhere else in your code
+await scheduleDeviceTokenSync(
+  { userId },
+  { taskName: userId, delaySeconds: 120 }
+);
 ```
 
 ## Deduplication System
@@ -267,7 +316,7 @@ automatic options.
 **How it works:**
 
 1.  **Manual deduplication - Providing `taskName`:** When you provide a
-    `taskName` string as the second argument to the scheduler function, Cloud
+    `taskName` in the options object as the second argument to the scheduler function, Cloud
     Tasks will use this name. If a task with the _exact same name_ already
     exists in the queue (or has existed recently), the new task creation attempt
     will fail with an "ALREADY_EXISTS" error, which `typed-tasks` handles
@@ -393,6 +442,49 @@ from "firebase-functions/v2/tasks".
 If you need similarly typed message handling for Pub/Sub, check out
 [typed-pubsub](https://github.com/0x80/typed-pubsub), which provides the same
 convenient abstractions and type-safe approach for Google Cloud Pub/Sub.
+
+## Migration from v1.x to v2.x
+
+Version 2.0.0 introduces a breaking change to the scheduler API. The `taskName` parameter has been moved into an options object to support additional scheduling options like `delaySeconds`.
+
+### Breaking Changes
+
+**Before (v1.x):**
+```typescript
+// Schedule without taskName
+await scheduler(data);
+
+// Schedule with taskName
+await scheduler(data, taskName);
+```
+
+**After (v2.x):**
+```typescript
+// Schedule without options
+await scheduler(data);
+
+// Schedule with taskName
+await scheduler(data, { taskName });
+
+// Schedule with delay
+await scheduler(data, { delaySeconds: 30 });
+
+// Schedule with both taskName and delay
+await scheduler(data, { taskName, delaySeconds: 30 });
+```
+
+### Migration Steps
+
+1. **Update your package.json** to use `typed-tasks@^2.0.0`
+2. **Update scheduler calls** that use the second parameter:
+   - Change `scheduler(data, taskName)` to `scheduler(data, { taskName })`
+3. **Test your application** to ensure all task scheduling works as expected
+
+### New Features in v2.x
+
+- **Individual task delays**: Schedule tasks to run at a specific time in the future using `delaySeconds`
+- **Improved API**: Cleaner options object allows for future extensibility
+- **Backward compatibility**: Tasks scheduled without options work exactly the same as before
 
 ## Error Handling
 
