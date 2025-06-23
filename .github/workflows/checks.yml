@@ -17,7 +17,6 @@ jobs:
       matrix:
         command: [lint, type-check, test]
     name: ${{ matrix.command }}
-    environment: Staging # Use staging env vars for testing
 
     steps:
       - uses: actions/checkout@v4
