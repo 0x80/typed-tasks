@@ -20,7 +20,7 @@ including automatic queue configuration and strategies for task deduplication.
 ## Installation
 
 ```bash
-npm install typed-tasks
+pnpm install typed-tasks
 ```
 
 ## Peer Dependencies
