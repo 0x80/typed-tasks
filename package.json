@@ -1,6 +1,6 @@
 {
   "name": "typed-tasks",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A type-safe abstraction for Google Cloud Tasks",
   "type": "module",
   "main": "dist/index.js",
