@@ -18,7 +18,7 @@ import type { SchemaRecord, TaskHandlerOptions } from "./types";
 export function createTaskHandlerFactory<Schemas extends SchemaRecord>(
   schemas: Schemas,
   region: string,
-  globalOptions: TaskHandlerOptions = defaultHandlerOptions
+  globalOptions: TaskHandlerOptions = defaultHandlerOptions,
 ) {
   return <T extends keyof Schemas & string>({
     queueName,
@@ -63,7 +63,7 @@ export function createTaskHandlerFactory<Schemas extends SchemaRecord>(
         if (!result.success) {
           console.error(
             new Error(`Zod validation error for queue ${queueName}`),
-            result.error.flatten()
+            result.error.flatten(),
           );
           // If validation fails, don't retry because it won't succeed
           return;
@@ -72,7 +72,7 @@ export function createTaskHandlerFactory<Schemas extends SchemaRecord>(
         // The result.data is now statically typed by zod as the correct type
         // since we successfully validated it with the schema
         return handler(result.data);
-      }
+      },
     );
 
     // Return the handler function directly for easier exports

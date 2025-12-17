@@ -142,17 +142,17 @@ export type TypedTasksClient<Defs extends TaskDefinitionRecord<string>> = {
    * @returns A function that schedules tasks with the following parameters:
    *
    *   - Data: The payload data that conforms to the task's schema
-   *   - Options: Optional configuration including taskName for deduplication
-   *       and delaySeconds for custom delays. When taskName is not provided
-   *       and deduplication is enabled (either via useDeduplication or
+   *   - Options: Optional configuration including taskName for deduplication and
+   *       delaySeconds for custom delays. When taskName is not provided and
+   *       deduplication is enabled (either via useDeduplication or
    *       deduplicationWindowSeconds), a taskName will be automatically
    *       generated from the payload data using MD5 hash.
    */
   createScheduler: <T extends keyof Defs & string>(
-    queueName: T
+    queueName: T,
   ) => (
     data: z.infer<ExtractSchema<Defs[T]>>,
-    options?: TaskScheduleOptions
+    options?: TaskScheduleOptions,
   ) => Promise<void>;
 
   /** Creates a type-safe handler function for processing tasks */

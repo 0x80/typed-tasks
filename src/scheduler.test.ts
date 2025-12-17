@@ -14,7 +14,7 @@ describe("createSchedulerFactory", () => {
       .fn<(projectId: string, region: string, queue: string) => string>()
       .mockImplementation(
         (projectId: string, region: string, queue: string) =>
-          `projects/${projectId}/locations/${region}/queues/${queue}`
+          `projects/${projectId}/locations/${region}/queues/${queue}`,
       );
     const taskPath = vi
       .fn<
@@ -22,12 +22,12 @@ describe("createSchedulerFactory", () => {
           projectId: string,
           region: string,
           queue: string,
-          taskName: string
+          taskName: string,
         ) => string
       >()
       .mockImplementation(
         (projectId: string, region: string, queue: string, taskName: string) =>
-          `projects/${projectId}/locations/${region}/queues/${queue}/tasks/${taskName}`
+          `projects/${projectId}/locations/${region}/queues/${queue}/tasks/${taskName}`,
       );
 
     type TaskRequest = {
@@ -46,7 +46,7 @@ describe("createSchedulerFactory", () => {
     };
 
     const createTask = vi.fn((request: TaskRequest) =>
-      Promise.resolve(request)
+      Promise.resolve(request),
     );
 
     const tasksClient: CloudTasksClient = {
@@ -65,7 +65,7 @@ describe("createSchedulerFactory", () => {
       tasksClient,
       "demo-project",
       "us-central1",
-      taskRegistry
+      taskRegistry,
     )("emailQueue");
 
     const payload = { email: "test@example.com" };
@@ -89,17 +89,16 @@ describe("createSchedulerFactory", () => {
     expect(task.scheduleTime).toBeDefined();
     expect(task.httpRequest).toBeDefined();
     expect(parent).toBe(
-      "projects/demo-project/locations/us-central1/queues/emailQueue"
+      "projects/demo-project/locations/us-central1/queues/emailQueue",
     );
     expect(task.name).toBe(
-      `projects/demo-project/locations/us-central1/queues/emailQueue/tasks/${expectedTaskName}`
+      `projects/demo-project/locations/us-central1/queues/emailQueue/tasks/${expectedTaskName}`,
     );
     expect(task.scheduleTime?.seconds).toBe(expectedScheduleSeconds);
     expect(task.httpRequest.body).toBe(
-      Buffer.from(JSON.stringify({ data: payload })).toString("base64")
+      Buffer.from(JSON.stringify({ data: payload })).toString("base64"),
     );
 
     vi.restoreAllMocks();
   });
 });
-

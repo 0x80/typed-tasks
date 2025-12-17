@@ -10,7 +10,8 @@ including automatic queue configuration and strategies for task deduplication.
 - **Runtime validation**: Schema validation using Zod prevents invalid payloads
 - **Task deduplication**: Multiple strategies for preventing duplicate task
   execution
-- **Delayed execution**: Schedule tasks to run in the future with time windows or individual delays
+- **Delayed execution**: Schedule tasks to run in the future with time windows
+  or individual delays
 - **Individual queue configuration**: Each task gets its own dedicated queue
 - **Global defaults**: Configure your own library-wide defaults with per-queue
   overrides
@@ -244,7 +245,7 @@ await tasks.createScheduler("sendNotification")(
     userId: "123",
     message: "Your order is ready!",
   },
-  { delaySeconds: 30 }
+  { delaySeconds: 30 },
 );
 
 // Schedule a task to run in 5 minutes
@@ -254,7 +255,7 @@ await tasks.createScheduler("processOrder")(
     userId: "user789",
     amount: 99.99,
   },
-  { delaySeconds: 300 }
+  { delaySeconds: 300 },
 );
 ```
 
@@ -268,7 +269,7 @@ await tasks.createScheduler("syncDeviceTokens")(
     userId,
     force: true,
   },
-  { taskName: userId } // Use the userId as the taskName for deduplication
+  { taskName: userId }, // Use the userId as the taskName for deduplication
 );
 ```
 
@@ -285,26 +286,24 @@ await tasks.createScheduler("syncDeviceTokens")(
   {
     taskName: `user-${userId}-sync`,
     delaySeconds: 60, // Run in 1 minute
-  }
+  },
 );
 ```
 
 #### Reusing Schedulers
 
-If you call the scheduler in multiple places, assigning it to a variable might be preferable:
+If you call the scheduler in multiple places, assigning it to a variable might
+be preferable:
 
 ```typescript
 const scheduleDeviceTokenSync = tasks.createScheduler("syncDeviceTokens");
 
-await scheduleDeviceTokenSync(
-  { userId, force: true },
-  { taskName: userId }
-);
+await scheduleDeviceTokenSync({ userId, force: true }, { taskName: userId });
 
 // Somewhere else in your code
 await scheduleDeviceTokenSync(
   { userId },
-  { taskName: userId, delaySeconds: 120 }
+  { taskName: userId, delaySeconds: 120 },
 );
 ```
 
@@ -316,12 +315,12 @@ automatic options.
 **How it works:**
 
 1.  **Manual deduplication - Providing `taskName`:** When you provide a
-    `taskName` in the options object as the second argument to the scheduler function, Cloud
-    Tasks will use this name. If a task with the _exact same name_ already
-    exists in the queue (or has existed recently), the new task creation attempt
-    will fail with an "ALREADY_EXISTS" error, which `typed-tasks` handles
-    gracefully (logs an info message and does not throw). This provides basic
-    deduplication for tasks, but note that
+    `taskName` in the options object as the second argument to the scheduler
+    function, Cloud Tasks will use this name. If a task with the _exact same
+    name_ already exists in the queue (or has existed recently), the new task
+    creation attempt will fail with an "ALREADY_EXISTS" error, which
+    `typed-tasks` handles gracefully (logs an info message and does not throw).
+    This provides basic deduplication for tasks, but note that
     [it can take up to 4 hours](https://cloud.google.com/tasks/docs/reference/rest/v2/projects.locations.queues.tasks/create#body.request_body.FIELDS.task)
     before an identical task name is accepted again.
 
@@ -341,7 +340,6 @@ automatic options.
 
 3.  **Using `deduplicationWindowSeconds`:** If you configure
     `deduplicationWindowSeconds` (greater than 0) in your task definition:
-
     - The task will be scheduled to execute _after_ the specified number of
       seconds has passed (e.g., `deduplicationWindowSeconds: 30` schedules the
       task for 30 seconds in the future).
@@ -358,8 +356,8 @@ automatic options.
       their execution.
 
 4.  **No deduplication:** If you don't provide a `taskName`, `useDeduplication`
-    is `false`, and `deduplicationWindowSeconds` is not configured (or is 0), no taskName is set and
-    Cloud Tasks will treat ever task as unique.
+    is `false`, and `deduplicationWindowSeconds` is not configured (or is 0), no
+    taskName is set and Cloud Tasks will treat ever task as unique.
 
 Using a deduplication window is somewhat comparable to a debounce, with the main
 difference being that a task will be executed every x seconds and does not wait
@@ -445,11 +443,14 @@ convenient abstractions and type-safe approach for Google Cloud Pub/Sub.
 
 ## Migration from v1.x to v2.x
 
-Version 2.0.0 introduces a breaking change to the scheduler API. The `taskName` parameter has been moved into an options object to support additional scheduling options like `delaySeconds`.
+Version 2.0.0 introduces a breaking change to the scheduler API. The `taskName`
+parameter has been moved into an options object to support additional scheduling
+options like `delaySeconds`.
 
 ### Breaking Changes
 
 **Before (v1.x):**
+
 ```typescript
 // Schedule without taskName
 await scheduler(data);
@@ -459,6 +460,7 @@ await scheduler(data, taskName);
 ```
 
 **After (v2.x):**
+
 ```typescript
 // Schedule without options
 await scheduler(data);
@@ -482,9 +484,11 @@ await scheduler(data, { taskName, delaySeconds: 30 });
 
 ### New Features in v2.x
 
-- **Individual task delays**: Schedule tasks to run at a specific time in the future using `delaySeconds`
+- **Individual task delays**: Schedule tasks to run at a specific time in the
+  future using `delaySeconds`
 - **Improved API**: Cleaner options object allows for future extensibility
-- **Backward compatibility**: Tasks scheduled without options work exactly the same as before
+- **Backward compatibility**: Tasks scheduled without options work exactly the
+  same as before
 
 ## Error Handling
 

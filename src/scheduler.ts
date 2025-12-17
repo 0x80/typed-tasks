@@ -17,7 +17,7 @@ import type { ExtractSchema, TaskDefinitionRecord } from "./types";
  */
 function generateTaskNameFromPayload(
   data: unknown,
-  deduplicationWindowSeconds?: number
+  deduplicationWindowSeconds?: number,
 ): string {
   const dataString = typeof data === "string" ? data : JSON.stringify(data);
   const baseHash = crypto.createHash("md5").update(dataString).digest("hex");
@@ -27,7 +27,7 @@ function generateTaskNameFromPayload(
     // Round the current timestamp to the nearest window boundary
     const currentTime = Date.now();
     const windowBoundary = Math.floor(
-      currentTime / (deduplicationWindowSeconds * 1000)
+      currentTime / (deduplicationWindowSeconds * 1000),
     );
     return `${baseHash}-${windowBoundary}`;
   }
@@ -56,7 +56,7 @@ export function createSchedulerFactory<
   tasksClient: CloudTasksClient,
   projectId: string,
   region: string,
-  taskRegistry: TaskRegistry
+  taskRegistry: TaskRegistry,
 ) {
   return <T extends keyof Defs & string>(queueName: T) => {
     /**
@@ -70,7 +70,7 @@ export function createSchedulerFactory<
      */
     return async (
       data: z.infer<ExtractSchema<Defs[T]>>,
-      options?: { taskName?: string; delaySeconds?: number }
+      options?: { taskName?: string; delaySeconds?: number },
     ): Promise<void> => {
       const taskConfig = taskRegistry.get(queueName);
       const deduplicationWindowSeconds = taskConfig?.deduplicationWindowSeconds;
@@ -94,7 +94,7 @@ export function createSchedulerFactory<
         // No taskName provided, generate one with window suffix if needed
         finalTaskName = generateTaskNameFromPayload(
           data,
-          deduplicationWindowSeconds
+          deduplicationWindowSeconds,
         );
       } else if (
         finalTaskName &&
@@ -104,16 +104,16 @@ export function createSchedulerFactory<
         // TaskName was provided, but we need to add time window suffix
         const currentTime = Date.now();
         const windowBoundary = Math.floor(
-          currentTime / (deduplicationWindowSeconds * 1000)
+          currentTime / (deduplicationWindowSeconds * 1000),
         );
         finalTaskName = `${finalTaskName}-${windowBoundary}`;
       }
 
       try {
         /**
-         * Priority: deduplicationWindowSeconds > delaySeconds
-         * If a deduplication window is configured, use that delay
-         * Otherwise, use delaySeconds if provided
+         * Priority: deduplicationWindowSeconds > delaySeconds If a
+         * deduplication window is configured, use that delay Otherwise, use
+         * delaySeconds if provided
          */
         if (deduplicationWindowSeconds && deduplicationWindowSeconds > 0) {
           scheduleTimeSeconds =
@@ -163,7 +163,7 @@ export function createSchedulerFactory<
             projectId,
             targetRegion,
             queueName,
-            finalTaskName
+            finalTaskName,
           );
         }
 
@@ -204,11 +204,11 @@ export function createSchedulerFactory<
               if (!(error instanceof AbortError)) {
                 console.warn(
                   `Task scheduling attempt ${attemptNumber} failed for ${queueName}. ${retriesLeft} retries left.`,
-                  getErrorMessage(error)
+                  getErrorMessage(error),
                 );
               }
             },
-          }
+          },
         );
       } catch (error) {
         if (
@@ -224,8 +224,8 @@ export function createSchedulerFactory<
         const errorMessage = getErrorMessage(error);
         console.error(
           new Error(
-            `Failed to schedule task ${queueName} after multiple retries: ${errorMessage}`
-          )
+            `Failed to schedule task ${queueName} after multiple retries: ${errorMessage}`,
+          ),
         );
         throw error;
       }

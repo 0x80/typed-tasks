@@ -17,7 +17,7 @@ import type {
  * schema
  */
 function isSchemaDefinition(
-  definition: z.ZodType | { schema: z.ZodType; options?: TaskSchedulerOptions }
+  definition: z.ZodType | { schema: z.ZodType; options?: TaskSchedulerOptions },
 ): definition is z.ZodType {
   return typeof definition === "function" || "parse" in definition;
 }
@@ -76,7 +76,7 @@ export function createTypedTasks<
       } else {
         return [key, value.schema];
       }
-    })
+    }),
   ) as SchemaRecord;
 
   // Populate task registry with scheduler options from taskDefinitions
@@ -101,14 +101,14 @@ export function createTypedTasks<
     client,
     projectId,
     region,
-    taskRegistry
+    taskRegistry,
   );
 
   // Get createHandler factory function
   const handlerFactory = createTaskHandlerFactory(
     schemas,
     region,
-    globalHandlerOptions
+    globalHandlerOptions,
   );
 
   // Create a proxy to handle direct access to task names
