@@ -39,6 +39,9 @@ importers:
       oxlint-tsgolint:
         specifier: ^0.9.1
         version: 0.9.1
+      prettier:
+        specifier: ^3.7.4
+        version: 3.7.4
       tsdown:
         specifier: ^0.18.0
         version: 0.18.0(typescript@5.9.3)
@@ -1564,6 +1567,11 @@ packages:
   presentable-error@0.0.1:
     resolution: {integrity: sha512-E6rsNU1QNJgB3sjj7OANinGncFKuK+164sLXw1/CqBjj/EkXSoSdHCtWQGBNlREIGLnL7IEUEGa08YFVUbrhVg==}
     engines: {node: '>=16'}
+
+  prettier@3.7.4:
+    resolution: {integrity: sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   proto3-json-serializer@2.0.2:
     resolution: {integrity: sha512-SAzp/O4Yh02jGdRc+uIrGoe87dkN/XtwxfZ4ZyafJHymd79ozp5VG5nyZ7ygqPM5+cpLDjjGnYFUkngonyDPOQ==}
@@ -3519,6 +3527,8 @@ snapshots:
       source-map-js: 1.2.1
 
   presentable-error@0.0.1: {}
+
+  prettier@3.7.4: {}
 
   proto3-json-serializer@2.0.2:
     dependencies:

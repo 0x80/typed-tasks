@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        command: [lint, type-check, test]
+        command: [lint, check-types, "check-format", test]
     name: ${{ matrix.command }}
 
     steps:
