@@ -3,13 +3,11 @@
   "version": "2.0.2",
   "description": "A type-safe abstraction for Google Cloud Tasks",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
   },
   "keywords": [
     "tasks",
@@ -34,10 +32,11 @@
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
-    "build": "tsup && tsc --emitDeclarationOnly",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "clean": "del-cli dist tsconfig.tsbuildinfo",
     "test": "vitest run",
-    "lint": "eslint . --max-warnings=0",
+    "lint": "oxlint --type-aware",
     "prepare": "pnpm clean && pnpm build"
   },
   "peerDependencies": {
@@ -47,12 +46,11 @@
   },
   "devDependencies": {
     "@codecompose/typescript-config": "^2.2.0",
-    "@eslint/js": "^9.39.2",
     "@google-cloud/tasks": "^6.2.1",
     "del-cli": "^7.0.0",
-    "eslint": "^9.39.2",
     "firebase-functions": "^7.0.2",
-    "tsup": "^8.5.1",
+    "oxlint": "^1.33.0",
+    "tsdown": "^0.18.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0",
     "vitest": "^4.0.16",
@@ -63,5 +61,6 @@
     "get-or-throw": "^2.0.1",
     "p-retry": "^7.1.1"
   },
-  "packageManager": "pnpm@10.12.2+sha512.a32540185b964ee30bb4e979e405adc6af59226b438ee4cc19f9e8773667a66d302f5bfee60a39d3cac69e35e4b96e708a71dd002b7e9359c4112a1722ac323f"
+  "packageManager": "pnpm@10.12.2+sha512.a32540185b964ee30bb4e979e405adc6af59226b438ee4cc19f9e8773667a66d302f5bfee60a39d3cac69e35e4b96e708a71dd002b7e9359c4112a1722ac323f",
+  "module": "./dist/index.mjs"
 }
