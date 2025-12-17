@@ -49,18 +49,10 @@ export function createTaskHandlerFactory<Schemas extends SchemaRecord>(
       },
     };
 
-    const { memory, timeoutSeconds, vpcConnector, rateLimits, retryConfig } =
-      mergedOptions;
-
     const taskHandler = onTaskDispatched(
       {
+        ...mergedOptions,
         region,
-        vpcConnector,
-        cpu: 1,
-        memory,
-        timeoutSeconds,
-        rateLimits,
-        retryConfig,
       },
       async ({ data }) => {
         // Get the schema for this task
