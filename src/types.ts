@@ -28,7 +28,7 @@ export type ValidateQueueName<S extends string> =
   IsCamelCase<S> extends true ? S : QueueNameErrorMessage;
 
 /** Record of schema types for each task */
-export type SchemaRecord = Record<string, z.ZodType<unknown>>;
+export type SchemaRecord = Record<string, z.ZodType>;
 
 /**
  * Options for configuring the scheduler - these are options that apply to how
@@ -90,9 +90,9 @@ export type ExtractSchema<T> = T extends z.ZodType
  * 2. An object with schema and optional scheduler options
  */
 export type TaskDefinition =
-  | z.ZodType<unknown>
+  | z.ZodType
   | {
-      schema: z.ZodType<unknown>;
+      schema: z.ZodType;
       options?: TaskSchedulerOptions;
     };
 

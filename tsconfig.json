@@ -1,6 +1,11 @@
 {
-  "extends": "@codecompose/typescript-config/library.json",
+  "extends": "@codecompose/typescript-config/library",
   "compilerOptions": {
-    "outDir": "dist" // required for tsc-alias
+    /** tsgo wants baseUrl to be removed */
+    "baseUrl": null,
+    /** tsgo doesn't inherit paths from base config  */
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   }
 }

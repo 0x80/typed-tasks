@@ -56,11 +56,11 @@ export function createTypedTasks<
     ...options,
     rateLimits: {
       ...defaultHandlerOptions.rateLimits,
-      ...(options.rateLimits ?? {}),
+      ...options.rateLimits,
     },
     retryConfig: {
       ...defaultHandlerOptions.retryConfig,
-      ...(options.retryConfig ?? {}),
+      ...options.retryConfig,
     },
   };
 

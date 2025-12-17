@@ -39,13 +39,13 @@ export function createTaskHandlerFactory<Schemas extends SchemaRecord>(
       ...options,
       rateLimits: {
         ...defaultHandlerOptions.rateLimits,
-        ...(globalOptions.rateLimits ?? {}),
-        ...(options.rateLimits ?? {}),
+        ...globalOptions.rateLimits,
+        ...options.rateLimits,
       },
       retryConfig: {
         ...defaultHandlerOptions.retryConfig,
-        ...(globalOptions.retryConfig ?? {}),
-        ...(options.retryConfig ?? {}),
+        ...globalOptions.retryConfig,
+        ...options.retryConfig,
       },
     };
 
