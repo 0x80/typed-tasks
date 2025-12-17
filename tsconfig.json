@@ -1,5 +1,5 @@
 {
-  "extends": "@codecompose/typescript-config/library.json",
+  "extends": "@codecompose/typescript-config/library",
   "compilerOptions": {
     "outDir": "dist" // required for tsc-alias
   }
