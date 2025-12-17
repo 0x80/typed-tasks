@@ -33,7 +33,7 @@
     "type-check": "tsc --noEmit",
     "build": "tsup && tsc --emitDeclarationOnly",
     "clean": "del-cli dist tsconfig.tsbuildinfo",
-    "test?": "vitest run",
+    "test": "vitest run",
     "lint": "eslint . --max-warnings=0",
     "prepare": "pnpm clean && pnpm build"
   },
