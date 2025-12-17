@@ -50,6 +50,7 @@
     "del-cli": "^7.0.0",
     "firebase-functions": "^7.0.2",
     "oxlint": "^1.33.0",
+    "oxlint-tsgolint": "^0.9.1",
     "tsdown": "^0.18.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.0",
