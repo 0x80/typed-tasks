@@ -35,6 +35,10 @@ function generateTaskNameFromPayload(
   return baseHash;
 }
 
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 /**
  * Creates a factory function that produces type-safe task schedulers for
  * specific tasks
@@ -195,12 +199,12 @@ export function createSchedulerFactory<
             minTimeout: 1000, // Initial retry delay (1 second)
             maxTimeout: 10000, // Maximum retry delay (10 seconds)
             randomize: true, // Add jitter to prevent thundering herd
-            onFailedAttempt: (error) => {
+            onFailedAttempt: ({ error, attemptNumber, retriesLeft }) => {
               // Only log if not aborted due to ALREADY_EXISTS
               if (!(error instanceof AbortError)) {
                 console.warn(
-                  `Task scheduling attempt ${String(error.attemptNumber)} failed for ${String(queueName)}. ${String(error.retriesLeft)} retries left.`,
-                  error.message
+                  `Task scheduling attempt ${attemptNumber} failed for ${queueName}. ${retriesLeft} retries left.`,
+                  getErrorMessage(error)
                 );
               }
             },
@@ -217,11 +221,10 @@ export function createSchedulerFactory<
         }
 
         // For other errors, log and rethrow
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
+        const errorMessage = getErrorMessage(error);
         console.error(
           new Error(
-            `Failed to schedule task ${String(queueName)} after multiple retries: ${errorMessage}`
+            `Failed to schedule task ${queueName} after multiple retries: ${errorMessage}`
           )
         );
         throw error;
