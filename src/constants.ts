@@ -7,6 +7,7 @@ export const defaultHandlerOptions = {
   memory: "512MiB",
   timeoutSeconds: 30 * MINUTE_SECONDS, // 30 minutes (maximum allowed)
   vpcConnector: undefined,
+  cpu: 1,
 
   // Queue congestion control settings
   rateLimits: {
