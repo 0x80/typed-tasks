@@ -39,7 +39,10 @@
     "lint": "oxlint --type-aware",
     "check-format": "prettier --check .",
     "format": "prettier --write .",
-    "prepare": "pnpm clean && pnpm build"
+    "prepare": "pnpm clean && pnpm build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "peerDependencies": {
     "@google-cloud/tasks": ">=5",
@@ -58,6 +61,7 @@
     "prettier-plugin-jsdoc": "^1.8.0",
     "tsdown": "^0.18.0",
     "typescript": "^5.9.3",
+    "vitepress": "^1.6.4",
     "vitest": "^4.0.16",
     "zod": "^4.2.1"
   },
