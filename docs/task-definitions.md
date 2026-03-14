@@ -86,9 +86,9 @@ Since the exported handler function name determines the queue name in GCP, only 
 
 When using the object form, the `options` field accepts:
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `deduplicationWindowSeconds` | `number` | Time window for deduplication. Also delays execution by this amount. Implicitly enables `useDeduplication`. |
-| `useDeduplication` | `boolean` | When `true`, automatically generates task names from the payload using an MD5 hash. |
+| Option                       | Type      | Description                                                                                                 |
+| ---------------------------- | --------- | ----------------------------------------------------------------------------------------------------------- |
+| `deduplicationWindowSeconds` | `number`  | Time window for deduplication. Also delays execution by this amount. Implicitly enables `useDeduplication`. |
+| `useDeduplication`           | `boolean` | When `true`, automatically generates task names from the payload using an MD5 hash.                         |
 
 See the [Deduplication](./deduplication) page for details on how these options work together.

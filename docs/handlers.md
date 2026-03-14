@@ -44,13 +44,13 @@ export const handleSyncDeviceTokens = tasks.createHandler({
 
 The available options match the `TaskQueueOptions` from `firebase-functions/v2/tasks`:
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `memory` | `string` | Memory allocation (e.g. `"512MiB"`, `"1GiB"`, `"4GiB"`) |
-| `timeoutSeconds` | `number` | Maximum execution time |
-| `rateLimits` | `object` | `maxDispatchesPerSecond` and `maxConcurrentDispatches` |
-| `retryConfig` | `object` | `maxAttempts`, `minBackoffSeconds`, `maxBackoffSeconds` |
-| `secrets` | `string[]` | Secret Manager secrets to make available |
+| Option           | Type       | Description                                             |
+| ---------------- | ---------- | ------------------------------------------------------- |
+| `memory`         | `string`   | Memory allocation (e.g. `"512MiB"`, `"1GiB"`, `"4GiB"`) |
+| `timeoutSeconds` | `number`   | Maximum execution time                                  |
+| `rateLimits`     | `object`   | `maxDispatchesPerSecond` and `maxConcurrentDispatches`  |
+| `retryConfig`    | `object`   | `maxAttempts`, `minBackoffSeconds`, `maxBackoffSeconds` |
+| `secrets`        | `string[]` | Secret Manager secrets to make available                |
 
 ## Using Secrets
 

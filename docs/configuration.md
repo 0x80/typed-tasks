@@ -59,10 +59,10 @@ Configuration is resolved in this order (later overrides earlier):
 
 The `createTypedTasks` function accepts:
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `client` | `CloudTasksClient` | Yes | Google Cloud Tasks client instance |
-| `definitions` | `TaskDefinitionRecord` | Yes | Task name to schema/options mapping |
-| `projectId` | `string` | Yes | GCP project ID |
-| `region` | `string` | Yes | GCP region for all task queues |
-| `options` | `TaskHandlerOptions` | No | Global defaults for all handlers |
+| Parameter     | Type                   | Required | Description                         |
+| ------------- | ---------------------- | -------- | ----------------------------------- |
+| `client`      | `CloudTasksClient`     | Yes      | Google Cloud Tasks client instance  |
+| `definitions` | `TaskDefinitionRecord` | Yes      | Task name to schema/options mapping |
+| `projectId`   | `string`               | Yes      | GCP project ID                      |
+| `region`      | `string`               | Yes      | GCP region for all task queues      |
+| `options`     | `TaskHandlerOptions`   | No       | Global defaults for all handlers    |
