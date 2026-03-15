@@ -1,3 +1,7 @@
 .VPFeature .icon {
   background-color: transparent !important;
 }
+
+.VPDoc .VPFooter {
+  display: flex !important;
+}
