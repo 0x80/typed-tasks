@@ -132,7 +132,7 @@ jobs:
       - name: Publish to npm
         if: ${{ inputs.dry_run == false }}
         run: |
-          npm publish --provenance --tag ${{ steps.version.outputs.dist_tag }}
+          npm publish --provenance --access public --tag ${{ steps.version.outputs.dist_tag }}
 
       - name: Push version commit
         if: ${{ inputs.dry_run == false }}
